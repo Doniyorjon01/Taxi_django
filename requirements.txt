@@ -19,5 +19,4 @@ typing_extensions==4.12.2
 uritemplate==4.1.1
 
 
-git config --global user.name "Doniyorjon01"
-git config --global user.email "doniyorabdurakhimov01@gmail.com"
+
