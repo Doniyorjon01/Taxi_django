@@ -1,0 +1,36 @@
+document.querySelectorAll(".seat").forEach((seat) => {
+    seat.addEventListener("click", function () {
+        const seatNumber = this.dataset.seat; // O'rindiq raqamini olish
+
+        fetch(`/book-seat/${seatNumber}/`, {
+            method: "POST", // So'rov turi
+            headers: {
+                "Content-Type": "application/json", // Ma'lumot turi
+                "X-CSRFToken": getCSRFToken(), // CSRF token qo'shish
+            },
+        })
+            .then((response) => response.json()) // JSON formatida javob olish
+            .then((data) => {
+                if (data.success) {
+                    this.classList.remove("green");
+                    this.classList.add("red");
+                    this.disabled = true; // Tugmani o'chirish
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => console.error("Xato yuz berdi:", error)); // Xatoni konsolda ko'rsatish
+    });
+});
+
+// CSRF tokenni olish uchun funksiya
+function getCSRFToken() {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split("=");
+        if (name === "csrftoken") {
+            return value;
+        }
+    }
+    return "";
+}
